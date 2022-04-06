@@ -1,8 +1,9 @@
-<?php
+<!--<//?php
 $title='view records';
  require_once 'includes/header.php' ;
+ require_once 'includes/auth_check.php' ;
  require_once 'db/conn.php'; 
- $result = $crud->getattendee();
+ //$result = $crud->getattendee();
  ?>
 <table class="table">
   <thead>
@@ -18,7 +19,7 @@ $title='view records';
   </thead>
   <tbody>
     <tr>
-    <?php while($r = $result->fetch(PDO::FETCH_ASSOC)){ ?>
+    <//?php while($r = $result->fetch(PDO::FETCH_ASSOC)){ ?>
       <td><?php echo $r['attendee_id'] ?></td>
       <td><?php echo $r['firstname'] ?></td>
       <td><?php echo $r['lastname'] ?></td>
@@ -30,7 +31,7 @@ $title='view records';
       <td><a href="delete.php?id=<?php echo $r['attendee_id'] ?>" class="btn btn-danger">delete</a>
     </td>
     </tr>
-   <?php } ?>
+   <//?php } ?>
   </tbody>
 </table>
 
@@ -41,7 +42,7 @@ $title='view records';
 
 
 </br>
-    <?php require_once 'includes/footer.php' ;?>
+    <?php require_once 'includes/footer.php' ;?>-->
 
 
 

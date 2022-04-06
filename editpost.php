@@ -3,15 +3,16 @@ require_once 'db/conn.php';
 if(isset($_POST['submit'])){
     $fname = $_POST['firstname'];
     $lname = $_POST['lastname'];
-    $dob = $_POST['dob'];
+    $doj = $_POST['dateofjoining'];
     $email = $_POST['email'];
-    $speciality = $_POST['speciality'];
-    $attendee_id =$_POST['attendee_id'];
+    $password = $_POST['password'];
+    $address = $_POST['address'];
+    $user_id =$_POST['user_id'];
 
-    $result = $crud->updateattendee($fname ,$lname ,$dob ,$email ,$speciality,$attendee_id);
+    $result = $crud->updateattendee($fname ,$lname  ,$email ,$password ,$address ,$doj  ,$user_id);
 //redirect to index page
 if($result){
-    header("Location: index.php");
+    header("Location: edit.php");
 }
 else{
     include 'includes/errormessage.php';
