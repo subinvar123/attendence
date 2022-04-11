@@ -6,7 +6,7 @@ $result = $crud-> updateleaveapprove($r,$id);
 
 if($result)
 {
-    header("Location:  viewrecord.php");
+    header("Location:  leaverecord.php");
 }
 else{
     include 'includes/errormessage.php';

@@ -100,3 +100,4 @@ $atle='attendance';
   </tbody>
 </table>
 <?php } ?>
+<?php require_once 'includes/footer.php' ;?>
