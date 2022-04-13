@@ -45,10 +45,5 @@ $title='view records';
 </table>
 
 
-
-
-
-
-
 </br>
     <?php require_once 'includes/footer.php' ;?>

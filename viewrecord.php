@@ -29,7 +29,6 @@ $title='view records';
                        
                         <div class="card-body card-block">
 <form method="post" action="viewsortall.php" enctype="multipart/form-data">
-
 <div class="form-group">
     <label for="employeename">Employee name</label>
     <select class="form-control" id="employeename" name="employeename">

@@ -85,6 +85,7 @@ public function insertleave($ltype ,$status ,$date ,$etime ,$userId){
     try {
         $result =$this->getuserdatecount($date,$userId);
         $result =$this->getuserleavedatecount($date,$userId);
+
        // print_r($result);
         if($result['num']>0){
             return false;
@@ -111,6 +112,7 @@ public function insertleave($ltype ,$status ,$date ,$etime ,$userId){
     }
 
 } 
+
 public function getuserleavedatecount($date,$userId){
     try{
         $sql=  "SELECT COUNT(*) as num FROM `leave` WHERE `start_date`=:date AND `user_id`=:userId;";
@@ -485,7 +487,6 @@ public function deleteattendee($id){
 }
 //to delete above user reacord in db aftre delting user
 public function deleteattendeeattandance($id){
-
     try{ 
         $sql = "DELETE FROM `attendance` WHERE `user_id`=:user_id;";
         $stmt = $this->db->prepare($sql);
@@ -515,6 +516,7 @@ public function deleteattendeeleave($id){
      return false;
  }
 }
+
 /*////
    public function getattendee(){
     try{

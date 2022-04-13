@@ -58,4 +58,5 @@ const attendanceLeaveDetails= function(type,employeename,month,year,userId){
             $( ".replace_tab" ).replaceWith(data.replace_tab);
         }
     });
+
 }

@@ -16,6 +16,7 @@ $title='index';
     $issucess = $crud->insertattendance($task, $date ,$stime ,$etime, $val,$_SESSION['userid']);
     
 
+
     if($val>4 && $val<7){
       $issucess = $crud->insertleave('Half Day' ,$status ,$date,$date ,$_SESSION['userid']);
     
