@@ -17,3 +17,6 @@ body {
 #mainnavbar .nav-link:hover {
     color: yellowgreen;
 }
+button.disabled{
+    pointer-events: none;
+  }

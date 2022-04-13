@@ -12,6 +12,8 @@ else{
     
     $id = $_GET['id'];
     $result =$crud->deleteattendee($id);
+    $result =$crud->deleteattendeeattandance($id);
+    $result =$crud->deleteattendeeleave($id);
     if($result)
     {
         header("Location:  viewallrecord.php");

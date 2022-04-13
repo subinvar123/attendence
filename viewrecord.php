@@ -20,7 +20,15 @@ $title='view records';
 
 
 </br></br></br></br></br></br>
-<form method="post" action="viewattendance.php" enctype="multipart/form-data">
+<div class="content pb-0 content-main">
+            <div class="animated fadeIn">
+               <div class="row">
+              
+                  <div class="col-lg-12">
+                     <div class="card">
+                       
+                        <div class="card-body card-block">
+<form method="post" action="viewsortall.php" enctype="multipart/form-data">
 
 <div class="form-group">
     <label for="employeename">Employee name</label>
@@ -59,14 +67,14 @@ $title='view records';
     </select>
   </div>
 
-<div class="form-group">
-    <label for="attendance/leave">Attendance/Leave</label>
-    <select class="form-control" id="attendance/leave" name="attendance/leave">
-      <option value="attendance">Attendance</option>
-      <option value="leave">Leave</option>
-     
-    </select>
-  </div></br>
+</br>
   <button type="submit" name="submit" class="btn btn-primary btn-block">Submit</button>
   </form>
+  </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+                  
   <?php require_once 'includes/footer.php' ;?>

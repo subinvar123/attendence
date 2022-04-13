@@ -31,37 +31,70 @@ class crud{
 
    } 
    //e
-   public function insertattendance($task, $date ,$stime ,$etime,$userId ){
-    try {
+   public function insertattendance($task, $date ,$stime ,$etime,$val ,$userId ){
+    try 
+        {
+            
+            $result =$this->getuserdatecount($date,$userId);
+            $result =$this->getuserleavedatecount($date,$userId);
+            if($result['num']>0){
+                return false;
+            }
+            else{
 
-     $sql = "INSERT INTO `attendance`( `task`, `date`, `start_time`,`end_time`,`user_id`) VALUES (:task ,:date,:stime,:etime,:userId)";
+     $sql = "INSERT INTO `attendance`( `task`, `date`, `start_time`,`end_time` ,`working_hours` ,`user_id`) VALUES (:task ,:date,:stime,:etime,:val ,:userId)";
      $stmt = $this->db->prepare($sql);
      $stmt->bindparam(':task' ,$task);
      $stmt->bindparam(':date' ,$date);
      $stmt->bindparam(':stime' ,$stime);
      $stmt->bindparam(':etime' ,$etime);
+     $stmt->bindparam(':val' ,$val);
      $stmt->bindparam(':userId' ,$userId);
     
      $stmt->execute();
 
      return true;
     }
-
+        }
     catch (PDOExeption $e) {
         echo $e->getMessage();
         return false;
     }
+   }
 
-} 
+public function getuserdatecount($date,$userId){
+    try{
+        $sql=  "SELECT COUNT(*) as num FROM `attendance` WHERE `date`=:date AND `user_id`=:userId;";
+        $stmt =$this->db->prepare($sql);
+        $stmt->bindparam(':date' ,$date);
+        $stmt->bindparam(':userId' ,$userId);
+         $stmt->execute();
+    
+         $result =$stmt->fetch();
+         
+        return $result;
+       }
+       catch (PDOExeption $e) {
+        echo $e->getMessage();
+        return false;
+    }
+       }  
+
 //e
-public function insertleave($ltype ,$status ,$sdate ,$etime ,$userId){
+public function insertleave($ltype ,$status ,$date ,$etime ,$userId){
     try {
-
+        $result =$this->getuserdatecount($date,$userId);
+        $result =$this->getuserleavedatecount($date,$userId);
+       // print_r($result);
+        if($result['num']>0){
+            return false;
+        }
+        else{
      $sql = "INSERT INTO `leave`( `leavetype`, `status`, `start_date`,`end_date`,`user_id`) VALUES (:ltype ,:status,:sdate,:edate ,:userId)";
      $stmt = $this->db->prepare($sql);
      $stmt->bindparam(':ltype' ,$ltype);
      $stmt->bindparam(':status' ,$status);
-     $stmt->bindparam(':sdate' ,$sdate);
+     $stmt->bindparam(':sdate' ,$date);
      $stmt->bindparam(':edate' ,$etime);
      $stmt->bindparam(':userId' ,$userId);
   
@@ -70,7 +103,7 @@ public function insertleave($ltype ,$status ,$sdate ,$etime ,$userId){
      $stmt->execute();
 
      return true;
-    }
+    }}
 
     catch (PDOExeption $e) {
         echo $e->getMessage();
@@ -78,13 +111,30 @@ public function insertleave($ltype ,$status ,$sdate ,$etime ,$userId){
     }
 
 } 
+public function getuserleavedatecount($date,$userId){
+    try{
+        $sql=  "SELECT COUNT(*) as num FROM `leave` WHERE `start_date`=:date AND `user_id`=:userId;";
+        $stmt =$this->db->prepare($sql);
+        $stmt->bindparam(':date' ,$date);
+        $stmt->bindparam(':userId' ,$userId);
+         $stmt->execute();
+    
+         $result =$stmt->fetch();
+
+        return $result;
+       }
+       catch (PDOExeption $e) {
+        echo $e->getMessage();
+        return false;
+    }
+       }  
 
 //viewrecord to viewatendance and viewleave
 public function getattndancedetails( $month, $year, $atle ,$id , $employeename){
     try{
        
         if($atle=="attendance"){
-            $sql = "SELECT a.id ,u.firstname ,u.lastname ,a.task ,a.date ,a.start_time ,a.end_time FROM `attendance` a
+            $sql = "SELECT a.id ,u.firstname ,u.lastname ,a.task ,a.date ,a.start_time ,a.end_time ,a.working_hours FROM `attendance` a
             INNER JOIN `users` u
             ON a.user_id = u.user_id WHERE  MONTH(`date`) IN ($month) AND YEAR(`date`) IN ($year) AND u.user_id= $employeename;";
            // $sql = "SELECT * FROM `attendance` WHERE  MONTH(`date`) IN ($month) AND YEAR(`date`) IN ($year) AND `user_id`= $employeename;";
@@ -151,7 +201,40 @@ public function getleavedetails( $month, $year, $atle ,$id ,$employeename){
      return false;
  }
     }  
-
+    public function getallleavedetails( $month, $year){
+        try{
+            
+                $sql = "SELECT l.id ,u.firstname ,u.lastname ,l.leavetype ,l.start_date ,l.end_date ,l.status FROM `leave` l
+                INNER JOIN `users` u
+                ON l.user_id = u.user_id WHERE  MONTH(`start_date`) IN ($month) AND YEAR(`start_date`) IN ($year);";
+            //$sql = "SELECT * FROM `leave` WHERE  MONTH(`start_date`) IN ($month) AND YEAR(`start_date`) IN ($year) AND `user_id`= $employeename;";
+                //$sql = "SELECT * FROM `leave` WHERE  MONTH(`start_date`) IN ($month) INTERSECT SELECT * FROM `leave` WHERE YEAR(`start_date`) IN ($year);";
+                //$sql = "SELECT `id`, `user_id`, `task`, `date`, `start_time`, `end_time` FROM `attendance` WHERE  MONTH(`date`)=$month AND YEAR(`date`)=$year;";
+               // $sql = "SELECT * FROM `attendance` WHERE MONTH(`date`)='$month' AND YEAR(`date`)='$year' ";
+                $stmt =$this->db->prepare($sql);
+               //$stmt->bindparam(':month' ,$month);
+             // $stmt->bindparam(':year' ,$year);
+            
+           // if($atle=="leave"){
+    
+    
+               // $sql = "SELECT * FROM `leave` WHERE MONTH(`start_date`)=$month AND YEAR(`start_date`)=$year;";
+               // $stmt =$this->db->prepare($sql);
+                //$stmt->bindparam(':month' ,$month);
+                //$stmt->bindparam(':year' ,$year);
+           // }
+    
+          $stmt->execute();
+     
+        // $result = $stmt->fetch();
+         // return $result;
+         return $stmt;
+        }
+        catch (PDOExeption $e) {
+         echo $e->getMessage();
+         return false;
+     }
+        }  
 //e
 public function getattendeedetails($id){
     try{
@@ -234,7 +317,7 @@ public function getattendeedetails($id){
         try{
      //$sql = "SELECT * FROM `attendance` INNER JOIN users ON users.user_id=attendance.user_id where `user_id`= $id;";
 
-     $sql = "SELECT a.id ,u.firstname ,u.lastname ,a.task ,a.date ,a.start_time ,a.end_time FROM `attendance` a
+     $sql = "SELECT a.id ,u.firstname ,u.lastname ,a.task ,a.date ,a.start_time ,a.end_time ,a.working_hours FROM `attendance` a
 INNER JOIN `users` u
 ON a.user_id = u.user_id where u.user_id= $id;";
      $result =$this->db->query($sql);
@@ -400,7 +483,38 @@ public function deleteattendee($id){
      return false;
  }
 }
+//to delete above user reacord in db aftre delting user
+public function deleteattendeeattandance($id){
 
+    try{ 
+        $sql = "DELETE FROM `attendance` WHERE `user_id`=:user_id;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindparam(':user_id' ,$id);
+        $stmt->execute();
+        return true;
+
+ }
+ catch (PDOExeption $e) {
+     echo $e->getMessage();
+     return false;
+ }
+}
+//to delete above user reacord in db aftre delting user
+public function deleteattendeeleave($id){
+
+    try{ 
+        $sql = "DELETE FROM `leave` WHERE `user_id`=:user_id;";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindparam(':user_id' ,$id);
+        $stmt->execute();
+        return true;
+
+ }
+ catch (PDOExeption $e) {
+     echo $e->getMessage();
+     return false;
+ }
+}
 /*////
    public function getattendee(){
     try{
@@ -437,3 +551,8 @@ public function deleteattendee($id){
 */
 }
 ?>
+
+
+
+
+
